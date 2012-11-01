@@ -9,6 +9,7 @@ AC_CONFIG_MACRO_DIR([acinclude.d])
 : ${CXXFLAGS=""}
 
 CXXFLAGS="$CXXFLAGS -I/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/include/ -I/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/include/darwin/"
+#CXXFlags = "$CXXFlags -I/usr/lib/jvm/java/include/ -I/usr/lib/jvm/java/include/linux/"
 
 AC_PROG_CXX
 AC_PROG_CXXCPP
