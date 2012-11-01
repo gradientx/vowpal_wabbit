@@ -1,9 +1,8 @@
-bin_PROGRAMS = library_example
+lib_LTLIBRARIES = libvwjni.la
 
-library_example_SOURCES = library_example.cc
-library_example_LDADD = ../vowpalwabbit/libvw.la ../vowpalwabbit/liballreduce.la
+libvwjni_la_SOURCES = VwJniBinding.cc
 
-ACLOCAL_AMFLAGS = -I acinclude.d
+libvwjni_la_LIBADD = ../vowpalwabbit/libvw.la ../vowpalwabbit/liballreduce.la
 
 INCLUDES = ${BOOST_CPPFLAGS} ${ZLIB_CPPFLAGS} ${PTHREAD_CFLAGS}
 AM_LDFLAGS = ${BOOST_LDFLAGS} ${BOOST_PROGRAM_OPTIONS_LIB} ${ZLIB_LDFLAGS} ${PTHREAD_LIBS}

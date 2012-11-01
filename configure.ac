@@ -8,6 +8,8 @@ AC_CONFIG_MACRO_DIR([acinclude.d])
 # if CXXFLAGS is not given by user, don't use default of "-O2 -g"
 : ${CXXFLAGS=""}
 
+CXXFLAGS="$CXXFLAGS -I/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/include/ -I/Library/Java/JavaVirtualMachines/jdk1.7.0_07.jdk/Contents/Home/include/darwin/"
+
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_LANG_CPLUSPLUS
