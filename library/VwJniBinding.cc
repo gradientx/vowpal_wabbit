@@ -89,7 +89,7 @@ JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_dump_1regressor
 }
 
 JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_load_1regressor
-(JNIEnv *env, jint id, jobject, jstring fn)
+(JNIEnv *env, jobject, jint id, jstring fn)
 {
   char *str;
   str = (char*) (env)->GetStringUTFChars(fn, NULL);
