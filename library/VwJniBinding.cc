@@ -103,3 +103,26 @@ JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_load_1regressor
   (env)->ReleaseStringUTFChars(fn, str);
 }
 
+JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_set_1coef
+(JNIEnv *env, jobject, jint id, jfloatArray coef, jint constIdx)
+{
+  vw& vwx=vw_arr[id];
+
+  uint32_t length = 1 << vwx.num_bits;
+  size_t stride = vwx.stride;
+
+  jfloat *body = (env)->GetFloatArrayElements(coef, 0);
+  int size=(env)->GetArrayLength(coef);
+  for (int i=0; i<size; i++) if (i!=constIdx) vwx.reg.weight_vectors[stride*i] = body[i];
+  if (constIdx>=0) {
+    int ci = ((constant*stride)&vwx.weight_mask)/stride;
+    vwx.reg.weight_vectors[stride*ci] = body[constIdx];
+  }
+
+  printf("size=[%d]\n",size);
+  for (int i=0; i<size; i++) printf("coef[%d]=[%g]\n", i, body[i]);
+
+  (env)->ReleaseFloatArrayElements(coef, body, 0);
+
+}
+
