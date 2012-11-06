@@ -119,9 +119,6 @@ JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_set_1coef
     vwx.reg.weight_vectors[stride*ci] = body[constIdx];
   }
 
-  printf("size=[%d]\n",size);
-  for (int i=0; i<size; i++) printf("coef[%d]=[%g]\n", i, body[i]);
-
   (env)->ReleaseFloatArrayElements(coef, body, 0);
 
 }
