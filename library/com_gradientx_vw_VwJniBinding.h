@@ -57,6 +57,14 @@ JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_dump_1regressor
 JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_load_1regressor
   (JNIEnv *, jobject, jint, jstring);
 
+/*
+ * Class:     com_gradientx_vw_VwJniBinding
+ * Method:    set_coef
+ * Signature: (I[FI)V
+ */
+JNIEXPORT void JNICALL Java_com_gradientx_vw_VwJniBinding_set_1coef
+  (JNIEnv *, jobject, jint, jfloatArray, jint);
+
 #ifdef __cplusplus
 }
 #endif
