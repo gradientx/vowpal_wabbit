@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 #undef com_gradientx_vw_VwJniBinding_VW_NUM
-#define com_gradientx_vw_VwJniBinding_VW_NUM 10L
+#define com_gradientx_vw_VwJniBinding_VW_NUM 1000L
 /*
  * Class:     com_gradientx_vw_VwJniBinding
  * Method:    initialize
