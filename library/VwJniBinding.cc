@@ -31,11 +31,11 @@ JNIEXPORT jfloat JNICALL Java_com_gradientx_vw_JniVowpalWabbit_read_1example(JNI
   if (str == NULL) {
     return -1.0f; /* OutOfMemoryError already thrown */
   }
-
-  vw& vwx=vw_arr[id];
+    
+  vw vwx = vw_arr[id];
 
   example *vec = VW::read_example(vwx,str);
-  vwx.learn(&vwx,vec);
+  vwx.learn(vec);
   float ret = vec->final_prediction;
   VW::finish_example(vwx,vec);
 
@@ -56,16 +56,16 @@ JNIEXPORT jfloatArray JNICALL Java_com_gradientx_vw_JniVowpalWabbit_get_1coef(JN
     return NULL; /* out of memory error thrown */
   }
 
-  vw& vwx=vw_arr[id];
+  vw vwx = vw_arr[id];
 
   uint32_t length = 1 << vwx.num_bits;
   size_t stride = vwx.stride;
 
   jfloat arr[size];
-  for (int i=0; i<size; i++) arr[i]=vwx.reg.weight_vectors[stride*i];
+  for (int i=0; i<size; i++) arr[i]=vwx.reg.weight_vector[stride*i];
   if (constIdx>=0) {
     int ci = ((constant*stride)&vwx.weight_mask)/stride;
-    arr[constIdx]=vwx.reg.weight_vectors[stride*ci];
+    arr[constIdx]=vwx.reg.weight_vector[stride*ci];
   }
   (env)->SetFloatArrayRegion(result,0,size,arr);
   return(result);
@@ -106,17 +106,17 @@ JNIEXPORT void JNICALL Java_com_gradientx_vw_JniVowpalWabbit_load_1regressor
 JNIEXPORT void JNICALL Java_com_gradientx_vw_JniVowpalWabbit_set_1coef
 (JNIEnv *env, jobject, jint id, jfloatArray coef, jint constIdx)
 {
-  vw& vwx=vw_arr[id];
+  vw vwx = vw_arr[id];
 
   uint32_t length = 1 << vwx.num_bits;
   size_t stride = vwx.stride;
 
   jfloat *body = (env)->GetFloatArrayElements(coef, 0);
   int size=(env)->GetArrayLength(coef);
-  for (int i=0; i<size; i++) if (i!=constIdx) vwx.reg.weight_vectors[stride*i] = body[i];
+  for (int i=0; i<size; i++) if (i!=constIdx) vwx.reg.weight_vector[stride*i] = body[i];
   if (constIdx>=0) {
     int ci = ((constant*stride)&vwx.weight_mask)/stride;
-    vwx.reg.weight_vectors[stride*ci] = body[constIdx];
+    vwx.reg.weight_vector[stride*ci] = body[constIdx];
   }
 
   (env)->ReleaseFloatArrayElements(coef, body, 0);
