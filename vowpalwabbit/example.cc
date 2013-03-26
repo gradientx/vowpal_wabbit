@@ -103,6 +103,8 @@ void update_example_indicies(bool audit, example* ec, uint32_t amount) { ec->ft_
 
 #include "global_data.h"
 void save_predictor(vw& all, string reg_name, size_t current_pass);
+void dump_regressor_stdout(vw& all, bool as_text);
+void dump_coefs_stdout(vw& all, bool as_text);
 
 bool command_example(void* a, example* ec) 
 {
@@ -127,6 +129,24 @@ bool command_example(void* a, example* ec)
       all->current_command = ec->example_counter;
       
       return true;
+    }
+    
+    if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "dump", 4) && all->current_command != ec->example_counter)
+    {//save state
+        cerr << "dumping regressor" << endl;
+        dump_regressor_stdout(*all, true);
+        
+        all->current_command = ec->example_counter;
+        return true;
+    }
+    
+    if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "coef", 4) && all->current_command != ec->example_counter)
+    {
+        cerr << "dumping coefs" << endl;
+        dump_coefs_stdout(*all, true);
+        
+        all->current_command = ec->example_counter;
+        return true;
     }
   return false;
 }

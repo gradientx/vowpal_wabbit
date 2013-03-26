@@ -20,6 +20,7 @@ void parse_regressor_args(vw& all, po::variables_map& vm, io_buf& io_temp);
 void finalize_regressor(vw& all, std::string reg_name);
 void initialize_regressor(vw& all);
 
+void dump_regressor_stdout(vw& all, bool as_text);
 void save_predictor(vw& all, std::string reg_name, size_t current_pass);
 
 #endif
