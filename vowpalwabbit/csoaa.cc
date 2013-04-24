@@ -13,6 +13,7 @@ license as described in the file LICENSE.
 #include "oaa.h"
 #include "v_hashmap.h"
 #include "parse_example.h"
+#include "vw.h"
 
 using namespace std;
 
@@ -345,7 +346,7 @@ namespace CSOAA {
     example* ec = NULL;
     while ( true )
       {
-        if ((ec = get_example(all->p)) != NULL)//semiblocking operation.
+        if ((ec = VW::get_example(all->p)) != NULL)//semiblocking operation.
           {
             learn(d, ec);
             output_example(*all, ec);
@@ -380,9 +381,9 @@ namespace CSOAA {
     }
 
     *(all.p->lp) = cs_label_parser;
-    all.base_learner_nb_w *= nb_actions;
+    all.weights_per_problem *= nb_actions;
     c->base=all.l;
-    c->csoaa_increment = ((uint32_t)all.length()/all.base_learner_nb_w) * all.stride;
+    c->csoaa_increment = ((uint32_t)all.length()/all.weights_per_problem) * all.reg.stride;
     all.sd->k = nb_actions;
 
     learner l = {c, drive, learn, finish, all.l.sl};
@@ -568,7 +569,7 @@ namespace LabelDict {
     for (unsigned char* i = ecsub->indices.begin; i != ecsub->indices.end; i++) {
       size_t feature_index = 0;
       for (feature *f = ecsub->atomics[*i].begin; f != ecsub->atomics[*i].end; f++) {
-        feature temp = { -f->x, (uint32_t) (f->weight_index & all.parse_mask) };
+        feature temp = { -f->x, (uint32_t) (f->weight_index) };
         ec->atomics[wap_ldf_namespace].push_back(temp);
         norm_sq += f->x * f->x;
         num_f ++;
@@ -576,7 +577,7 @@ namespace LabelDict {
         if (all.audit) {
           if (! (ecsub->audit_features[*i].size() >= feature_index)) {
             audit_data b_feature = ecsub->audit_features[*i][feature_index];
-            audit_data a_feature = { NULL, NULL, (uint32_t) (f->weight_index & all.parse_mask), -f->x, false };
+            audit_data a_feature = { NULL, NULL, (uint32_t) (f->weight_index), -f->x, false };
             a_feature.space = b_feature.space;
             a_feature.feature = b_feature.feature;
             ec->audit_features[wap_ldf_namespace].push_back(a_feature);
@@ -993,7 +994,7 @@ namespace LabelDict {
   void drive_ldf_singleline(vw& all, ldf& l) {
     example* ec = NULL;
     while (true) {
-      if ((ec = get_example(all.p)) != NULL) { //semiblocking operation.
+      if ((ec = VW::get_example(all.p)) != NULL) { //semiblocking operation.
 
         if (LabelDict::ec_is_example_header(ec)) {
           cerr << "error: example headers not allowed in ldf singleline mode" << endl;
@@ -1019,7 +1020,7 @@ namespace LabelDict {
     l.read_example_this_loop = 0;
     l.need_to_clear = false;
     while (true) {
-      if ((ec = get_example(all.p)) != NULL) { // semiblocking operation
+      if ((ec = VW::get_example(all.p)) != NULL) { // semiblocking operation
         learn_multiline(all, l, ec);
         if (l.need_to_clear) {
 	  if (l.ec_seq.size() > 0)

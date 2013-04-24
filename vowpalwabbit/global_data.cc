@@ -249,7 +249,7 @@ vw::vw()
 
   bfgs = false;
   hessian_on = false;
-  stride = 1;
+  reg.stride = 1;
   num_bits = 18;
   default_bits = true;
   daemon = false;
@@ -267,7 +267,7 @@ vw::vw()
 
   set_minmax = set_mm;
 
-  base_learner_nb_w = 1;
+  weights_per_problem = 1;
 
   power_t = 0.5;
   eta = 0.5; //default learning rate for normalized adaptive updates, this is switched to 10 by default for the other updates (see parse_args.cc)

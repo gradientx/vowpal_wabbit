@@ -1,4 +1,5 @@
 #include "oaa.h"
+#include "vw.h"
 
 namespace BINARY {
   struct binary {
@@ -28,7 +29,7 @@ namespace BINARY {
     example* ec = NULL;
     while ( true )
       {
-        if ((ec = get_example(all->p)) != NULL)//semiblocking operation.
+        if ((ec = VW::get_example(all->p)) != NULL)//semiblocking operation.
           {
             learn(d, ec);
 	    OAA::output_example(*all, ec);
