@@ -133,7 +133,7 @@ bool command_example(void* a, example* ec)
     
     if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "dump", 4) && all->current_command != ec->example_counter)
     {//save state
-        cerr << "dumping regressor" << endl;
+        //cerr << "dumping regressor" << endl;
         dump_regressor_stdout(*all, true);
         
         all->current_command = ec->example_counter;
@@ -142,7 +142,7 @@ bool command_example(void* a, example* ec)
     
     if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "coef", 4) && all->current_command != ec->example_counter)
     {
-        cerr << "dumping coefs" << endl;
+        //cerr << "dumping coefs" << endl;
         dump_coefs_stdout(*all, true);
         
         all->current_command = ec->example_counter;
