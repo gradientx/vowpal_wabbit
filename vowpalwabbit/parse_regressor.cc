@@ -267,9 +267,9 @@ void dump_coefs_stdout(vw& all, bool as_text){
     io_temp.open_file("/dev/stdout", all.stdin_off, io_buf::WRITE);
     
 	uint32_t length = 1 << all.num_bits;
-	size_t stride = all.stride;
+	size_t stride = all.reg.stride;
     
-	unsigned int ci = ((constant*stride)&all.weight_mask)/stride;
+	unsigned int ci = ((constant*stride)&all.reg.weight_mask)/stride;
     
 	for(uint32_t i = 0; i < length; i++)
 	{
