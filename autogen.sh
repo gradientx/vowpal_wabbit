@@ -4,7 +4,7 @@ AC_PATH=/usr/share
 [ -x "`which clang++`" ] && CXX=clang++
 case $( uname -s ) in
  Darwin)  alias vwlibtool=glibtoolize
-	AC_PATH=/opt/local/share;;
+	AC_PATH=/usr/local/share;;
  *)	alias vwlibtool=libtoolize;;
 esac
 
