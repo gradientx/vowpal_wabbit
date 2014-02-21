@@ -3,6 +3,8 @@
 #include "learner.h"
 
 void save_predictor(vw& all, string reg_name, size_t current_pass);
+void dump_regressor_stdout(vw& all, bool as_text);
+void dump_coefs_stdout(vw& all, bool as_text);
 
 namespace LEARNER
 {
@@ -39,6 +41,20 @@ namespace LEARNER
 		
 		VW::finish_example(*all,ec);
 	      }
+            else if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "dump", 4))
+              {
+                if (!all->quiet)
+                  cerr  << "dumping regressor to stdout" << endl;
+                dump_regressor_stdout(*all, true);
+                VW::finish_example(*all,ec);
+              }
+            else if (ec->tag.size() >= 4 && !strncmp((const char*) ec->tag.begin, "coef", 4))
+              {
+                if (!all->quiet)
+                  cerr << "dumping coefs to stdout" << endl;
+                dump_coefs_stdout(*all, true);
+                VW::finish_example(*all,ec);
+              }
 	    else // empty example
 	      {
 		all->l->learn(*ec);

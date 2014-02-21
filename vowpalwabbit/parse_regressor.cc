@@ -356,4 +356,87 @@ void parse_mask_regressor_args(vw& all, po::variables_map& vm){
   }
 }
 
+#include "constant.h"
 
+void dump_regressor_stdout(vw& all, bool as_text)
+{
+  io_buf io_temp;
+
+  io_temp.open_file("/dev/stdout", all.stdin_off, io_buf::WRITE);
+
+  save_load_header(all, io_temp, false, as_text);
+  all.l->save_load(io_temp, false, as_text);
+  bin_write_fixed(io_temp, "\n", 1);
+
+  io_temp.flush(); // close_file() should do this for me ...
+}
+
+void dump_coefs_stdout(vw& all, bool as_text){
+  io_buf io_temp;
+
+  io_temp.open_file("/dev/stdout", all.stdin_off, io_buf::WRITE);
+
+  uint32_t length = 1 << all.num_bits;
+  size_t stride = all.reg.stride;
+
+  unsigned int ci = ((constant*stride)&all.reg.weight_mask)/stride;
+
+  for(uint32_t i = 0; i < length; i++)
+  {
+    if ((all.lda == 0) && (all.rank == 0))
+    {
+      weight v;
+      v = all.reg.weight_vector[stride*i];
+      if (v != 0.)
+      {
+        if (!as_text) {
+          bin_write_fixed(io_temp, (char *)&i, sizeof (i));
+          bin_write_fixed(io_temp, (char *)&v, sizeof (v));
+        } else {
+          char buff[512];
+          int len;
+          if(i != ci){
+            len = sprintf(buff, "%d:%g\t", i, v);
+          }else{
+            len = sprintf(buff, "%d:%g\t", -1, v);
+          }
+          bin_write_fixed(io_temp, buff, len);
+        }
+      }
+    }
+    else
+    {
+      size_t K = all.lda;
+
+      if (all.rank != 0)
+        K = all.rank*2+1;
+
+      for (size_t k = 0; k < K; k++)
+      {
+        weight v = all.reg.weight_vector[stride*i+k];
+        uint32_t ndx = stride*i+k;
+        if (!as_text) {
+          bin_write_fixed(io_temp, (char *)&ndx, sizeof (ndx));
+          bin_write_fixed(io_temp, (char *)&v, sizeof (v));
+        } else {
+          char buff[512];
+          int len;
+
+          if (all.rank != 0)
+            len = sprintf(buff, "%f ", v);
+          else
+            len = sprintf(buff, "%f ", v + all.lda_rho);
+
+          bin_write_fixed(io_temp, buff, len);
+        }
+      }
+      if (as_text)
+        bin_write_fixed(io_temp, "\t", 1);
+    }
+  }
+
+  if (as_text)
+    bin_write_fixed(io_temp, "\n", 1);
+
+  io_temp.flush();
+}

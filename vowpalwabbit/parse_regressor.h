@@ -25,4 +25,7 @@ void save_load_header(vw& all, io_buf& model_file, bool read, bool text);
 
 void parse_mask_regressor_args(vw& all, po::variables_map& vm);
 
+void dump_regressor_stdout(vw& all, bool as_text);
+void dump_coefs_stdout(vw& all, bool as_text);
+
 #endif
