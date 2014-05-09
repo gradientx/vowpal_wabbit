@@ -358,26 +358,13 @@ void parse_mask_regressor_args(vw& all, po::variables_map& vm){
 
 #include "constant.h"
 
-void dump_regressor_stdout(vw& all, bool as_text)
-{
-  io_buf io_temp;
-
-  io_temp.open_file("/dev/stdout", all.stdin_off, io_buf::WRITE);
-
-  save_load_header(all, io_temp, false, as_text);
-  all.l->save_load(io_temp, false, as_text);
-  bin_write_fixed(io_temp, "\n", 1);
-
-  io_temp.flush(); // close_file() should do this for me ...
-}
-
 void dump_coefs_stdout(vw& all, bool as_text){
   io_buf io_temp;
 
   io_temp.open_file("/dev/stdout", all.stdin_off, io_buf::WRITE);
 
   uint32_t length = 1 << all.num_bits;
-  size_t stride = all.reg.stride;
+  size_t stride = all.reg.stride_shift;
 
   unsigned int ci = ((constant*stride)&all.reg.weight_mask)/stride;
 
